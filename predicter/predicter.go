@@ -28,14 +28,14 @@ func (p *Player) Predict(removedCards []string) float64 {
 	allCardsCount := cardNum - removedCardsCount - actionCardsNum - modifierCardsNum
 	var res float64
 	for card := range p.currentCards {
+		inPack := card - 1
 		if countRemovedCards, ok := removedCardPoints[card]; ok && countRemovedCards > 0 {
-			inPack := card - 1 - countRemovedCards
-			if inPack <= 0 {
-				continue
-			}
-			k := float64(inPack) / float64(allCardsCount)
-			res += k
+			inPack -= countRemovedCards
 		}
+		if inPack <= 0 {
+			continue
+		}
+		res += float64(inPack) / float64(allCardsCount)
 	}
 	return res
 }
